@@ -1,0 +1,141 @@
+MariaDB [CMindjimbadb]> select * from employee;
++--------+-----------+--------------+--------------+----------------------+------------------------+
+| emp_no | name      | profession   | contact_info | email                | address                |
++--------+-----------+--------------+--------------+----------------------+------------------------+
+|   1172 | A.DARREN  | DOCTOR       | 647-321-7654 | a.darren@outlook.com | 123 BROWN ST, TORONTO  |
+|   1174 | B.GEORGE  | DOCTOR       | 647-000-8762 | b.george@outlook.com | 14 HALSEY, TORONTO     |
+|   1178 | J.SMITH   | DOCTOR       | 647-833-0136 | j.smith@outlook.com  | 10 FLOWER AVE, TORONTO |
+|   1179 | A.DARREN  | DOCTOR       | 647-321-7633 | a.darren@outlook.com | 123 BROWN ST, TORONTO  |
+|   1180 | Z.MANN    | DOCTOR       | 647-024-2222 | z.mann@outlook.com   | 3 BEL ST, TORONTO      |
+|   2666 | N.SCHWARZ | NURSE        | 647-666-6666 | n.schwarz@outlook.com| 666 SOS AVE, TORONTO   |
+|   2761 | A.HOMES   | NURSE        | 647-193-0939 | a.homes@outlook.com  | 88 JERRY AVE, TORONTO  |
+|   2987 | D.BEN     | NURSE        | 647-222-4512 | d.ben@outlook.com    | 567 HILL ST, TORONTO   |
+|   2990 | B.CONLEN  | NURSE        | 647-456-1234 | b.conlen@outlook.com | 33 HELLO ST, TORONTO   |
+|   3112 | A.BARRY   | PHARMACIST   | 647-789-9876 | a.barry@outlook.com  | 12 BYE AVE, TORONTO    |
+|   3444 | J.DOUG    | PHARMACIST   | 647-973-8822 | j.doug@outlook.com   | 11 JEN ST, TORONTO     |
+|   4753 | V.AHMAD   | RECEPTIONIST | 647-111-6593 | v.ahmad@outlook.com  | 1 DEAN AVE, TORONTO    |
+|   4757 | M.SPOKE   | RECEPTIONIST | 647-300-0033 | m.spoke@outlook.com  | 98 BELLY, TORONTO      |
++--------+-----------+--------------+--------------+----------------------+------------------------+
+13 rows in set (0.00 sec)
+
+
+MariaDB [CMindjimbadb]> select * from patient;
++--------+--------------+-----+------------+--------------+--------------+------------------------+---------------------------+
+| Pat_no | Name         | Sex | D_admitted | D_discharged | Contact_info | Email                  | Address                   |
++--------+--------------+-----+------------+--------------+--------------+------------------------+---------------------------+
+|  10000 | J.SODEN      | M   | 2017-01-14 | 2017-01-23   | 647-416-1122 | J.SODEN@yahoo.com      | 111 YELLOW RD, TORONTO    |
+|  10012 | K.GLASPIE    | F   | 2017-02-11 | 2017-02-11   | 647-466-7091 | K.GLASPIE@yahoo.com    | 9977 ORANGE, OAKVILLE     |
+|  11453 | T.EDINGTON   | F   | 2017-01-22 | 2017-02-03   | 647-006-2348 | T.EDINGTON@yahoo.com   | 8741 APPLES AVE, TORONTO  |
+|  12345 | B.BEN        | M   | 2016-08-09 | 0000-00-00   | 647-456-7899 | b.ben@yahoo.com        | 8 AVE RD, TORONTO         |
+|  13999 | L.RULAND     | F   | 2017-01-12 | 2017-01-29   | 647-430-3333 | L.RULAND@yahoo.com     | 707 STREET ST, SUDBURY    |
+|  14123 | S.WEIMAR     | M   | 2017-01-28 | 2017-02-01   | 647-412-1256 | S.WEIMAR@yahoo.com     | 2222 TORONTO AVE, TORONTO |
+|  14141 | A.HALLPERN   | M   | 2017-02-03 | 2017-02-10   | 647-450-7521 | A.HALLPERN@yahoo.com   | 7170 RAPTORS ST, TORONTO  |
+|  14201 | M.DILL       | M   | 2017-02-11 | 0000-00-00   | 647-457-3330 | M.DILL@yahoo.com       | 717 WATER AVE, OAKVILLE   |
+|  14561 | K.MULLOY     | M   | 2017-01-20 | 2017-02-06   | 647-156-7777 | K.MULLOY@yahoo.com     | 92 RAINBOW AVE, TORONTO   |
+|  14568 | O.KOSINSKI   | F   | 2016-12-12 | 2017-01-01   | 647-456-7888 | o.kosinski@yahoo.com   | 77 BRICK RD, TORONTO      |
+|  14569 | J.BUCKLAND   | F   | 2016-12-11 | 2016-12-14   | 647-096-7889 | J.BUCKLAND@yahoo.com   | 18 HELL AVE, SUDBURY      |
+|  14570 | P.UNREIN     | M   | 2016-12-20 | 2017-01-15   | 647-446-7880 | P.UNREIN@yahoo.com     | 900 GEOX, TORONTO         |
+|  14828 | A.LAMONTAGNE | F   | 2017-02-05 | 2017-02-11   | 647-486-4118 | A.LAMONTAGNE@yahoo.com | 14 BOSS RD, TORONTO       |
+|  15555 | P.HEBERARD   | M   | 2016-11-12 | 0000-00-00   | 647-456-7811 | P.HEBERARD@yahoo.com   | 456 HALSEY AVE, TORONTO   |
+|  15633 | T.YUN        | M   | 2016-12-24 | 2017-01-14   | 647-176-7822 | T.YUN@yahoo.com        | 770 PORT RD, SUDBURY      |
+|  16688 | D.HALTNER    | M   | 2017-01-22 | 0000-00-00   | 647-026-1001 | D.HALTNER@yahoo.com    | 6101 SALAD RD, TORONTO    |
+|  17390 | R.TARDIFF    | F   | 2017-01-13 | 2017-01-15   | 647-896-0001 | R.TARDIFF@yahoo.com    | 1087 WALL ST, TORONTO     |
+|  18765 | C.RIVET      | F   | 2017-01-23 | 2017-02-02   | 647-123-2018 | C.RIVET@yahoo.com      | 874 MORNING, OAKVILLE     |
+|  18888 | K.TREAT      | M   | 2017-01-12 | 0000-00-00   | 647-000-4422 | K.TREAT@yahoo.com      | 177 AVENUE AVE, SUDBURY   |
+|  19873 | S.BRADFIELD  | F   | 2017-02-03 | 2017-02-12   | 647-406-4040 | S.BRADFIELD@yahoo.com  | 450 SUDBURY AVE, TORONTO  |
++--------+--------------+-----+------------+--------------+--------------+------------------------+---------------------------+
+20 rows in set (0.00 sec)
+
+
+MariaDB [CMindjimbadb]> select * from room;
++---------+--------+--------------+
+| Room_no | Size   | Availability |
++---------+--------+--------------+
+|    1010 | DOUBLE | NA           |
+|    1011 | DOUBLE | A            |
+|    1018 | SINGLE | NA           |
+|    1022 | SINGLE | A            |
+|    1023 | SINGLE | NA           |
+|    1025 | SINGLE | NA           |
+|    1027 | SINGLE | NA           |
+|    2021 | SINGLE | NA           |
+|    2023 | DOUBLE | A            |
+|    2027 | SINGLE | A            |
+|    2028 | SINGLE | A            |
+|    2033 | DOUBLE | NA           |
+|    2034 | DOUBLE | NA           |
+|    3023 | DOUBLE | NA           |
+|    3027 | SINGLE | NA           |
+|    3045 | DOUBLE | NA           |
+|    3051 | DOUBLE | A            |
+|    3054 | DOUBLE | NA           |
+|    3055 | DOUBLE | NA           |
+|    3083 | DOUBLE | A            |
+|    3087 | DOUBLE | NA           |
+|    3088 | DOUBLE | NA           |
+|    3096 | SINGLE | NA           |
+|    3098 | SINGLE | NA           |
+|    3099 | SINGLE | NA           |
++---------+--------+--------------+
+25 rows in set (0.00 sec)
+
+
+MariaDB [CMindjimbadb]> select * from record;
++-----------+--------+-------------+----------------+
+| Record_no | Pat_no | Appointment | Info           |
++-----------+--------+-------------+----------------+
+|      8022 |  12345 | 2016-08-09  | SURGERY        |
+|      8120 |  13999 | 2017-01-12  | LASER SURGERY  |
+|      8341 |  11453 | 2017-01-22  | NA             |
+|      8764 |  12345 | 2016-08-11  | SURGERY        |
+|      8863 |  16688 | 2017-01-22  | AMPUTATION     |
+|      8903 |  10000 | 2017-01-14  | BROKEN ARM     |
+|      8999 |  10012 | 2017-02-11  | FOOD POISONING |
++-----------+--------+-------------+----------------+
+7 rows in set (0.00 sec)
+
+
+MariaDB [CMindjimbadb]> select * from doctor;
++--------+----------+----------------+------------------+--------+
+| Emp_no | Name     | Specialization | Next_appointment | Pat_no |
++--------+----------+----------------+------------------+--------+
+|   1172 | A.DARREN | SURGEON        | 2016-08-09       |  12345 |
+|   1172 | A.DARREN | SURGEON        | 2016-08-09       |  12345 |
+|   1174 | B.GEORGE | SURGEON        | 2017-01-12       |  13999 |
+|   1178 | J.SMITH  | GENERALIST     | 2017-01-22       |  11453 |
+|   1179 | A.DARREN | GENERALIST     | 2017-02-11       |  10012 |
+|   1180 | Z.MANN   | SURGEON        | 2017-01-22       |  16688 |
++--------+----------+----------------+------------------+--------+
+6 rows in set (0.00 sec)
+
+
+MariaDB [CMindjimbadb]> select * from M_stocks;
++--------+-----------+------------+-----+
+| M_code | Available | Exp_date   | Qty |
++--------+-----------+------------+-----+
+|   9012 | A         | 2018-01-01 |  46 |
+|   9013 | NA        | 2019-01-01 |   0 |
+|   9014 | A         | 2018-01-01 |  54 |
+|   9166 | A         | 2018-01-01 |  12 |
+|   9215 | A         | 2017-01-01 | 100 |
+|   9342 | NA        | 2017-12-12 |   0 |
++--------+-----------+------------+-----+
+6 rows in set (0.00 sec)
+
+
+MariaDB [CMindjimbadb]> select * from bill;
++--------+--------+-------------+-----+------+
+| Pat_no | M_code | Price_per_M | Qty | Bill |
++--------+--------+-------------+-----+------+
+|  10000 |   9014 |          45 |   2 |   90 |
+|  10012 |   9012 |          60 |   4 |  240 |
+|  14141 |   9013 |          29 |   5 |  145 |
+|  14201 |   9166 |          99 |   3 |  297 |
+|  19873 |   9215 |          10 |   1 |   10 |
+|  18765 |   9342 |          22 |   6 |  132 |
++--------+--------+-------------+-----+------+
+6 rows in set (0.00 sec)
+
+
+
+
