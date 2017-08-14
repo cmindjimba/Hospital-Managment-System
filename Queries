@@ -1,0 +1,239 @@
+(1) For the BILL table, to obtain the total price (‘Bill’) I had to look for a way to multiply two columns of the same table. When I select the ‘Price_per_M * Qty’ from the BILL table, this gives the results from the ‘Bill’ column:
+MariaDB [CMindjimbadb]> select * from bill;
++--------+--------+-------------+-----+------+
+| Pat_no | M_code | Price_per_M | Qty | Bill |
++--------+--------+-------------+-----+------+
+|  10000 |   9014 |          45 |   2 |   90 |
+|  10012 |   9012 |          60 |   4 |  240 |
+|  14141 |   9013 |          29 |   5 |  145 |
+|  14201 |   9166 |          99 |   3 |  297 |
+|  19873 |   9215 |          10 |   1 |   10 |
+|  18765 |   9342 |          22 |   6 |  132 |
++--------+--------+-------------+-----+------+
+6 rows in set (0.00 sec)
+
+
+
+MariaDB [CMindjimbadb]> select Price_per_M*Qty
+    -> from bill;
++-----------------+
+| Price_per_M*Qty |
++-----------------+
+|              90 |
+|             240 |
+|             145 |
+|             297 |
+|              10 |
+|             132 |
++-----------------+
+6 rows in set (0.00 sec)
+
+
+
+
+(2) For the M_stock (stock of medicines available), the hospital starts with a given quantity of medicine (0 to 100 per medicine), and every time a medicine is prescribed to a patient on a bill, that specific medicine has to be reduce from the stocks. For example, if a patient needs two of the medicine #9014, #9014 will be subtracted twice from the stocks and gives the total number left in stock:
+
+MariaDB [CMindjimbadb]> select * from M_stocks;
++--------+-----------+------------+-----+
+| M_code | Available | Exp_date   | Qty |
++--------+-----------+------------+-----+
+|   9012 | A         | 2018-01-01 |  46 |
+|   9013 | NA        | 2019-01-01 |   0 |
+|   9014 | A         | 2018-01-01 |  54 |
+|   9166 | A         | 2018-01-01 |  12 |
+|   9215 | A         | 2017-01-01 | 100 |
+|   9342 | NA        | 2017-12-12 |   0 |
++--------+-----------+------------+-----+
+6 rows in set (0.00 sec)
+
+MariaDB [CMindjimbadb]> select(select Qty from M_stocks
+    -> where M_code = 9014)
+    -> -
+    -> (select Qty from bill
+    -> where M_code = 9014)
+    -> as Qty_left_in_stock;
++-------------------+
+| Qty_left_in_stock |
++-------------------+
+|                52 |
++-------------------+
+1 row in set (0.00 sec)
+
+But after doing this, I still had the problem of updating the M_stocks because the subtraction alone does not do anything more than just subtracting:
+MariaDB [CMindjimbadb]> update M_stocks MS, bill B 
+    -> set MS.Qty = MS.Qty - B.Qty 
+    -> where MS.M_code = 9014;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [CMindjimbadb]> select * from M_stocks;
++--------+-----------+------------+-----+
+| M_code | Available | Exp_date   | Qty |
++--------+-----------+------------+-----+
+|   9012 | A         | 2018-01-01 |  46 |
+|   9013 | NA        | 2019-01-01 |   0 |
+|   9014 | A         | 2018-01-01 |  52 |
+|   9166 | A         | 2018-01-01 |  12 |
+|   9215 | A         | 2017-01-01 | 100 |
+|   9342 | NA        | 2017-12-12 |   0 |
++--------+-----------+------------+-----+
+6 rows in set (0.01 sec)
+
+
+
+(3) When we want to know which medication has a current quantity in stock of 0, a way to quickly find out is to create a view:
+MariaDB [CMindjimbadb]> create view Empty_Stocks as
+    -> select * from M_stocks
+    -> where Qty = 0;
+Query OK, 0 rows affected (0.01 sec)
+
+MariaDB [CMindjimbadb]> select * from Empty_Stocks;
++--------+-----------+------------+-----+
+| M_code | Available | Exp_date   | Qty |
++--------+-----------+------------+-----+
+|   9013 | NA        | 2019-01-01 |   0 |
+|   9342 | NA        | 2017-12-12 |   0 |
++--------+-----------+------------+-----+
+2 rows in set (0.00 sec)
+
+
+
+
+(4) While keeping track of the stocks, it is also important to refill the empty stocks. 
+First we update the quantity by adding 100 more of one medication, in this case it is the medication #9342:
+MariaDB [CMindjimbadb]> update M_stocks 
+    -> set Qty = Qty + 100 
+    -> where M_code = 9342;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [CMindjimbadb]> select * from M_stocks;
++--------+-----------+------------+-----+
+| M_code | Available | Exp_date   | Qty |
++--------+-----------+------------+-----+
+|   9012 | A         | 2018-01-01 |  46 |
+|   9013 | NA        | 2019-01-01 |  52 |
+|   9014 | A         | 2018-01-01 |  50 |
+|   9166 | A         | 2018-01-01 |  12 |
+|   9215 | A         | 2017-01-01 | 100 |
+|   9342 | NA        | 2017-12-12 | 100 |
++--------+-----------+------------+-----+
+6 rows in set (0.00 sec)
+
+
+Second, we have to change the availability of the medication from ‘NA’ to ‘A’:
+
+MariaDB [CMindjimbadb]> update M_stocks
+    -> set Available = 'A'
+    -> where M_code = 9342;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [CMindjimbadb]> select * from M_stocks;
++--------+-----------+------------+-----+
+| M_code | Available | Exp_date   | Qty |
++--------+-----------+------------+-----+
+|   9012 | A         | 2018-01-01 |  46 |
+|   9013 | NA        | 2019-01-01 |  52 |
+|   9014 | A         | 2018-01-01 |  50 |
+|   9166 | A         | 2018-01-01 |  12 |
+|   9215 | A         | 2017-01-01 | 100 |
+|   9342 | A         | 2017-12-12 | 100 |
++--------+-----------+------------+-----+
+6 rows in set (0.00 sec)
+
+
+
+
+(5) In order to keep the hospital organized, we have to keep track of the available rooms and their size. To be able to quickly get a result, it is easier to create a view. For example, let’s assume that we are looking for all the available single rooms:
+MariaDB [CMindjimbadb]> create view Room_available as
+    -> select * from room
+    -> where Availability = 'A'
+    -> and Size = 'SINGLE';
+Query OK, 0 rows affected (0.01 sec)
+
+MariaDB [CMindjimbadb]> select * from Room_available;
++---------+--------+--------------+
+| Room_no | Size   | Availability |
++---------+--------+--------------+
+|    1022 | SINGLE | A            |
+|    2027 | SINGLE | A            |
+|    2028 | SINGLE | A            |
++---------+--------+--------------+
+3 rows in set (0.00 sec)
+
+
+
+(6) Calculate how many days before the doctor’s next appointments:
+MariaDB [CMindjimbadb]> select Next_appointment,
+    -> datediff(Next_appointment, '2016-08-06') "Days Bfr Next Appointment"
+    -> from doctor;
++------------------+---------------------------+
+| Next_appointment | Days Bfr Next Appointment |
++------------------+---------------------------+
+| 2016-08-09       |                         3 |
+| 2016-08-09       |                         3 |
+| 2017-01-12       |                       159 |
+| 2017-01-22       |                       169 |
+| 2017-02-11       |                       189 |
+| 2017-01-22       |                       169 |
++------------------+---------------------------+
+6 rows in set (0.00 sec)
+(Yes, some of my doctors have half a year before their next appointment… This is not a very busy hospital…)
+
+
+
+
+(7) What if we need to know the number of patients currently registered in the database that are females and live in Toronto: 
+MariaDB [CMindjimbadb]> select count(*) from patient
+    -> where Address like '%TORONTO'
+    -> and Sex = 'F';
++----------+
+| count(*) |
++----------+
+|        5 |
++----------+
+1 row in set (0.00 sec)
+
+
+Once we have that number, it would be interesting to have more details. Therefore we should be able to get the names of these patients:
+MariaDB [CMindjimbadb]> select count(*),
+    -> Name from patient where Address like '%TORONTO'
+    -> and Sex = 'F'
+    -> group by Name;
++----------+--------------+
+| count(*) | Name         |
++----------+--------------+
+|        1 | A.LAMONTAGNE |
+|        1 | O.KOSINSKI   |
+|        1 | R.TARDIFF    |
+|        1 | S.BRADFIELD  |
+|        1 | T.EDINGTON   |
++----------+--------------+
+5 rows in set (0.00 sec)
+
+
+What if we need to know the percentage of patients that are females among all the patients:
+MariaDB [CMindjimbadb]> set @total = (select count(*)
+    -> from patient);
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [CMindjimbadb]> select count(*),count(*) * 100/@total as '%',
+    -> Name from patient where Sex = 'F'
+    -> group by Name;
++----------+--------+--------------+
+| count(*) | %      | Name         |
++----------+--------+--------------+
+|        1 | 5.0000 | A.LAMONTAGNE |
+|        1 | 5.0000 | C.RIVET      |
+|        1 | 5.0000 | J.BUCKLAND   |
+|        1 | 5.0000 | K.GLASPIE    |
+|        1 | 5.0000 | L.RULAND     |
+|        1 | 5.0000 | O.KOSINSKI   |
+|        1 | 5.0000 | R.TARDIFF    |
+|        1 | 5.0000 | S.BRADFIELD  |
+|        1 | 5.0000 | T.EDINGTON   |
++----------+--------+--------------+
+9 rows in set (0.00 sec)
+
+(Results are accurate because there is a total of 20 patients and, 9 of them are females)
